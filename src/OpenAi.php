@@ -901,6 +901,19 @@ class OpenAi
     }
 
     /**
+     * @param string $id
+     * @return bool|string
+     */
+    public function deleteVectorStore(string $id)
+    {
+        $this->addAssistantsBetaHeader();
+        $url = Url::vectorStoreUrl() . '/' . $id;
+        $this->baseUrl($url);
+
+        return $this->sendRequest($url, 'DELETE');
+    }
+
+    /**
      * @param string $vectorStoreId
      * @param string $fileId
      * @return bool|string
@@ -928,6 +941,20 @@ class OpenAi
         $this->baseUrl($url);
 
         return $this->sendRequest($url, 'GET');
+    }
+
+    /**
+     * @param string $vectorStoreId
+     * @param string $fileId
+     * @return bool|string
+     */
+    public function deleteVectorStoreFile(string $vectorStoreId, string $fileId)
+    {
+        $this->addAssistantsBetaHeader();
+        $url = Url::vectorStoreUrl() . '/' . $vectorStoreId . '/files/' . $fileId;
+        $this->baseUrl($url);
+
+        return $this->sendRequest($url, 'DELETE');
     }
 
     /**
@@ -1105,7 +1132,7 @@ class OpenAi
             throw new Exception(curl_error($curl));
         }
 
-        return $response;
+        return json_decode($response);
     }
 
     /**
